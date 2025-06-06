@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Posts in Category: {{ category.name }}{% endblock %}
+
+{% block content %}
+    
+     <section class="breadcrumbs">
+        <div class="container">
+          <div class="d-flex justify-content-between align-items-center">
+            <h2> {{ category.name }}</h2>
+            <ol>
+              <li><a href="{% url 'home' %}">Home</a></li>
+              <li>Categories</li>
+              <li>{{ category.name }}</li>
+            </ol>
+          </div>
+        </div>
+      </section><section id="blog" class="blog">
+        <div class="container" data-aos="fade-up">
+          <div class="row">
+            <div class="col-lg-8 entries"> 
+              
+              {% if post_list %}
+                {% for post_item in post_list %} {# Changed loop variable to post_item #}
+                  <article class="entry">
+                    <div class="entry-img">
+                      {% if post_item.photo and post_item.photo.url %}
+                        <img src="{{ post_item.photo.url }}" alt="{{ post_item.title }}" class="img-fluid">
+                      {% else %}
+                        {# Optional: Placeholder if no photo #}
+                        {# <img src="{% static 'assets/img/default-post-image.png' %}" alt="Default Image" class="img-fluid"> #}
+                      {% endif %}
+                    </div>
+      
+                    <h2 class="entry-title">
+                      <a href="{{ post_item.get_absolute_url }}">{{ post_item.title }}</a>
+                    </h2>
+      
+                    <div class="entry-meta">
+                      <ul>
+                        <li class="d-flex align-items-center"><i class="bi bi-person"></i> <a href="#">{{ post_item.author.username }}</a></li>
+                        <li class="d-flex align-items-center"><i class="bi bi-clock"></i> <a href="#"><time datetime="{{ post_item.date|date:"Y-m-d" }}">{{ post_item.date|date:"SHORT_DATE_FORMAT" }}</time></a></li>
+                        <li class="d-flex align-items-center"><i class="bi bi-folder"></i> <a href="{{ category.get_absolute_url }}">{{ category.name }}</a></li>
+                        {# To display comment count, you'd typically use post_item.comments.count #}
+                        {# <li class="d-flex align-items-center"><i class="bi bi-chat-dots"></i> <a href="{{ post_item.get_absolute_url }}#comments">{{ post_item.comments.count }} Comments</a></li> #}
+                      </ul>
+                    </div>
+      
+                    <div class="entry-content">
+                      <p>
+                        {{ post_item.excerpt|truncatewords:30 }} {# Displaying excerpt, limited to 30 words #}
+                      </p>
+                      <div class="read-more">
+                        <a href="{{ post_item.get_absolute_url }}">Read More</a>
+                      </div>
+                    </div>
+                  </article>{% endfor %}
+
+                {# Pagination section #}
+              
+              
+                {# Pagination section #}
+                {% if is_paginated %}
+                  <div class="blog-pagination">
+                    <ul class="justify-content-center">
+                      {% if page_obj.has_previous %}
+                        <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+                      {% else %}
+                        <li class="disabled"><span>&laquo;</span></li>
+                      {% endif %}
+                      
+                      {% for i in paginator.page_range %}
+                      {% if page_obj.number == i %}
+                        <li class="page_item active">
+                          <a class="page-link">{{ i }}</a>
+                        </li>
+                      {% else %}
+                        <li class="page-item">
+                          <a href="?page={{i}}" class="page-link">{{ i }}</a>
+                        </li>
+                      {% endif %}
+                    {% endfor %}     
+                      
+                      {% if page_obj.has_next %}
+                        <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+                      {% else %}
+                        <li class="disabled"><span>&raquo;</span></li>
+                      {% endif %}
+                    </ul>
+                  </div>
+                {% endif %}
+
+              {% else %}
+                <p>No posts found in the category "{{ category.name }}".</p>
+              {% endif %}
+
+
+              
+            </div><div class="col-lg-4">
+              {% block sidebar %}
+                {% include 'sidebar.html' %} {# Including the sidebar #}
+              {% endblock sidebar %}
+            </div></div>
+        </div>
+      </section>
+{% endblock content %}

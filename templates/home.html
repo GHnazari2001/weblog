@@ -1,10 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
 
-
 {% block content %}
-
- 
+    
      <!-- ======= Blog Section ======= -->
      <section class="breadcrumbs">
         <div class="container">
@@ -106,13 +104,15 @@
   
             <div class="col-lg-4">
   
-          
+              {% block sidebar %}
+                {% include 'sidebar.html' %}
+              {% endblock sidebar %}
+  
             </div><!-- End blog sidebar -->
-            
   
           </div>
   
         </div>
       </section><!-- End Blog Section -->
 
-{% endblock %}
+{% endblock content %}

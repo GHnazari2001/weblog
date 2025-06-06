@@ -1,7 +1,7 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 
 <head>
   <meta charset="utf-8">
@@ -54,14 +54,37 @@
       </div>
 
       <nav id="navbar" class="navbar">
+        <ul>
+          <li><a href="{% url 'home' %}">Home</a></li>
+          {% if user.is_authenticated %}
+          <li><a href="{% url 'new_post' %}">+ New Post</a></li>
 
+          <li class="dropdown"><a href="#">{{ user.username }} <span><i class="bi bi-chevron-down"></i></span></a>
+            <ul>
+              <form action="{% url 'logout' %}" method="post" style="margin:0; padding: 0;">
+                {% csrf_token %}
+                <button type="submit" class="dropdown-item btn btn-link text-decoration-none" style="padding-left: 20px; padding-bottom: 8px;">logout</button>
+              </form>
+              <li><a href="{% url 'profile' %}">Profile</a></li>
+              <li><a href="{% url 'password_change' %}">Password Change</a></li>
+              <li><a href="{% url 'password_reset' %}">Password Reset</a></li>
+            </ul>
+          </li>
+          {% else %}
+          <li class="dropdown"><a href="#">User <span><i class="bi bi-chevron-down"></i></span></a>
+            <ul>
+              <li><a href="{% url 'login' %}">Login</a></li>
+              <li><a href="{% url 'signup' %}">Sign Up</a></li>
+            </ul>
+          </li>
+          {% endif %}
+        </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
-
     </div>
   </header><!-- End Header -->
 
-  <main id="main">
+  <main  id="main">
 
     {% block content %}
     {% endblock content %}

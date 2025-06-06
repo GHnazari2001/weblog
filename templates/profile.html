@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+
+{% block content %}
+  <section class="breadcrumbs">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center">
+        <h2>پروفایل کاربری</h2>
+        <ol>
+          <li><a href="{% url 'home' %}">Home</a></li>
+          <li>Profile </li>
+        </ol>
+      </div>
+    </div>
+  </section><section id="profile-details" class="profile-details section-bg">
+    <div class="container" data-aos="fade-up">
+
+      <div class="row gy-4 justify-content-center"> 
+
+        <div class="col-lg-9 entries"> 
+          <article class="entry">
+            <div class="profile-header d-flex flex-column align-items-center mb-4">
+              {% if user_profile.photo %}
+                <img src="{{ user_profile.photo.url }}" alt="عکس پروفایل {{ user_profile.username }}" class="profile-avatar rounded-circle img-thumbnail" style="width: 150px; height: 150px; object-fit: cover;">
+              {% else %}
+                <div class="profile-avatar-placeholder rounded-circle img-thumbnail d-flex align-items-center justify-content-center" style="width: 150px; height: 150px; background-color: #b4bbc3;">
+                  <i class="bi bi-person-fill" style="font-size: 80px; color: #0f2841;"></i>
+                </div>
+              {% endif %}
+              
+              <h3 class="mt-3 mb-1">{{ user_profile.get_full_name|default:user_profile.username }}</h3>
+              
+              <div class="social-links-profile mt-2 mb-3">
+                {% if user_profile.linkedin %}
+                  <a href="https://linkedin.com/{{ user_profile.linkedin }}" target="_blank" rel="noopener noreferrer" class="mx-1"><i class="bi bi-linkedin" style="font-size: 1.5rem;"></i></a>
+                {% endif %}
+                {% if user_profile.instagram %}
+                  <a href="https://instagram.com/{{ user_profile.instagram}}" target="_blank" rel="noopener noreferrer" class="mx-1"><i class="bi bi-instagram" style="font-size: 1.5rem;"></i></a>
+                {% endif %}
+                {% if user_profile.facebook %}
+                  <a href="{{ user_profile.facebook }}" target="_blank" rel="noopener noreferrer" class="mx-1"><i class="bi bi-facebook" style="font-size: 1.5rem;"></i></a>
+                {% endif %}
+                {% if user_profile.telegram %}
+                  <a href="https://t.me/{{ user_profile.telegram}}" target="_blank" rel="noopener noreferrer" class="mx-1"><i class="bi bi-telegram" style="font-size: 1.5rem;"></i></a>
+                {% endif %}
+              </div>
+            </div>
+
+            
+            <div class="profile-fields px-md-3">
+              
+              <dl class="row">
+                <dt class="col-sm-3 text-sm-end">first name:</dt>
+                <dd class="col-sm-9 profile-field-value">{{ user_profile.first_name|default:"" }}</dd>
+
+                <dt class="col-sm-3 text-sm-end">last name:</dt>
+                <dd class="col-sm-9 profile-field-value">{{ user_profile.last_name|default:"" }}</dd>
+
+                <dt class="col-sm-3 text-sm-end"> username:</dt>
+                <dd class="col-sm-9 profile-field-value">{{ user_profile.username|default:"" }}</dd>
+
+                <dt class="col-sm-3 text-sm-end">email:</dt>
+                <dd class="col-sm-9 profile-field-value">{{ user_profile.email|default:"" }}</dd>
+
+                <dt class="col-sm-3 text-sm-end">age:</dt>
+                <dd class="col-sm-9 profile-field-value">{{ user_profile.age|default:"" }}</dd>
+
+                <dt class="col-sm-3 text-sm-end"> about:</dt>
+                <dd class="col-sm-9 profile-field-value">{{ user_profile.about|linebreaksbr|default:"" }}</dd>
+              </dl>
+            </div>
+            
+
+            <div class="text-center mt-4">
+              <a href="{% url 'profile_edit' %}" class="btn btn-primary"><i ></i> edit </a>
+            </div>
+
+          </article></div>
+
+      </div>
+
+    </div>
+  </section>
+  <style>
+    .profile-field-value {
+      background-color: #f8f9fa;
+      border: 1px solid #dee2e6;
+      padding: 0.375rem 0.75rem;
+      border-radius: 0.25rem;
+      min-height: calc(1.5em + 0.75rem + 2px); 
+      margin-bottom: 0.5rem; 
+    }
+    @media (max-width: 575.98px) {
+      .profile-fields .text-sm-end {
+        text-align: left !important;
+      }
+    }
+  </style>
+
+{% endblock content %}

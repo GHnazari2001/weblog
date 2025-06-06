@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    
+     <section class="breadcrumbs">
+        <div class="container">
+          <div class="d-flex justify-content-between align-items-center">
+            <h2> Search </h2>
+            <ol>
+              <li><a href="{% url 'home' %}">Home</a></li>
+              <li>Search</li>
+            </ol>
+          </div>
+        </div>
+      </section><section id="blog" class="blog">
+        <div class="container" data-aos="fade-up">
+          <div class="row">
+            <div class="col-lg-8 entries">
+              
+              {% if query %}
+                <h4 class="mb-4">result for : "{{ query }}"</h4>
+              {% endif %}
+
+              {% if post_list %}
+                {% for post in post_list %}
+                  <article class="entry">
+                    <div class="entry-img">
+                      {% if post.photo %}
+                        <img src="{{ post.photo.url }}" alt="{{ post.title }}" class="img-fluid">
+                      {% endif %}
+                    </div>
+      
+                    <h2 class="entry-title">
+                      <a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a>
+                    </h2>
+      
+                    <div class="entry-meta">
+                      <ul>
+                        <li class="d-flex align-items-center"><i class="bi bi-person"></i> <a href="#">{{ post.author.username }}</a></li>
+                        <li class="d-flex align-items-center"><i class="bi bi-clock"></i> <a href="#"><time datetime="{{ post.date|date:"Y-m-d" }}">{{ post.date|date:"SHORT_DATE_FORMAT" }}</time></a></li>
+                      
+                      </ul>
+                    </div>
+      
+                    <div class="entry-content">
+                      <p>
+                        {{ post.excerpt }}
+                      </p>
+                      <div class="read-more">
+                        <a href="{% url 'post_detail' post.pk %}">Read More</a>
+                      </div>
+                    </div>
+                  </article>{% endfor %}
+
+                {# بخش صفحه‌بندی اگر فعال کرده‌اید #}
+                {% if is_paginated %}
+                  <div class="blog-pagination">
+                    <ul class="justify-content-center">
+                      {% if page_obj.has_previous %}
+                        <li><a href="?q={{ query }}&page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+                      {% else %}
+                        <li class="disabled"><span>&laquo;</span></li>
+                      {% endif %}
+                      
+                      {% for i in paginator.page_range %}
+                        {% if page_obj.number == i %}
+                          <li class="active"><span>{{ i }}</span></li>
+                        {% else %}
+                          <li><a href="?q={{ query }}&page={{ i }}">{{ i }}</a></li>
+                        {% endif %}
+                      {% endfor %}
+                      
+                      {% if page_obj.has_next %}
+                        <li><a href="?q={{ query }}&page={{ page_obj.next_page_number }}">&raquo;</a></li>
+                      {% else %}
+                        <li class="disabled"><span>&raquo;</span></li>
+                      {% endif %}
+                    </ul>
+                  </div>
+                {% endif %}
+
+              {% else %}
+                {% if query %}
+                  <p>هیچ پستی مطابق با جستجوی شما ("{{ query }}") پیدا نشد.</p>
+                {% else %}
+                  <p>لطفاً عبارتی را برای جستجو وارد کنید.</p>
+                {% endif %}
+              {% endif %}
+            </div><div class="col-lg-4">
+              {% block sidebar %}
+                {% include 'sidebar.html' %} {# نمایش مجدد سایدبار #}
+              {% endblock sidebar %}
+            </div></div>
+        </div>
+      </section>{% endblock content %}
