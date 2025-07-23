@@ -9,10 +9,10 @@
     <div class="container">
 
         <div class="d-flex justify-content-between align-items-center">
-            <h2>Blog</h2>
+            <h2>وبلاگ</h2>
 
             <ol>
-                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'home' %}">خانه</a></li>
                 <li>{{ post.title }}</li>
             </ol>
         </div>
@@ -40,12 +40,17 @@
 
                     <div class="entry-meta">
                         <ul>
-                            <li class="d-flex align-items-center"><i class="bi bi-person"></i> <a
-                                    href="blog-single.html">{{ post.author }}</a></li>
-                            <li class="d-flex align-items-center"><i class="bi bi-clock"></i> <a
-                                    href="blog-single.html"><time datetime="2020-01-01">{{ post.date }}</time></a></li>
-                            <li class="d-flex align-items-center"><i class="bi bi-chat-dots"></i> <a
-                                    href="blog-single.html">12 Comments</a></li>
+                            <li class="d-flex align-items-center"><i class="bi bi-person"></i> <a href="#">{{post.author }}</a></li>
+                            <li class="d-flex align-items-center"><i class="bi bi-clock"></i> <a href="#"><time
+                                datetime="{{ post.date|date:" Y-m-d" }}">{{ post.date|date:"SHORT_DATE_FORMAT" }}</time></a></li>
+                            <li class="d-flex align-items-center"><i class="bi bi-chat-dots"></i> {{post.comment_set.count }}</li>
+                            <li class="d-flex align-items-center like-section" data-post-id="{{ post.pk }}">
+                                <a href="#" class="like-button">
+                                    <i
+                                        class="bi {% if user in post.likes.all %}bi-heart-fill{% else %}bi-heart{% endif %}"></i>
+                                </a>
+                                <span class="like-count">{{ post.number_of_likes }}</span>
+                            </li>
                         </ul>
                     </div>
 
@@ -57,9 +62,9 @@
                     <div class="entry-footer">
                         <ul class="cats">
                             <i class="bi bi-pen-fill"></i>
-                            <li><a href="{% url 'update_post' post.pk %}">Update</a></li>
+                            <li><a href="{% url 'update_post' post.pk %}">ویرایش</a></li>
                             <i class="bi bi-file-x"></i>
-                            <li><a href="{% url 'delete_post' post.pk %}">Delete</a></li>
+                            <li><a href="{% url 'delete_post' post.pk %}">حذف</a></li>
                         </ul>
                     </div>
                     {% endif %}
@@ -71,8 +76,8 @@
                     <img src="{{ post.author.photo.url }}" class="rounded-circle float-left"
                         alt="Photo of {{ post.author.username }}">
                     {% else %}
-                    <img src="{% static 'assets/img/default-avatar.png' %}" class="rounded-circle float-left"
-                        alt="" style="width:80px; height:80px;">
+                    <img src="{% static 'assets/img/default-avatar.png' %}" class="rounded-circle float-left" alt=""
+                        style="width:80px; height:80px;">
                     {% endif %}
 
                     <div>
@@ -82,16 +87,16 @@
                             <a href="https://facebook.com/#"><i class="bi bi-facebook"></i></a>
                             <a href="https://instagram.com/#"><i class="biu bi-instagram"></i></a>
                         </div>
-                        
+
                     </div>
                 </div><!-- End blog author bio -->
 
                 <div class="blog-comments">
 
                     {% if post.comment_set.count > 1 %}
-                    <h4 class="comments-count">{{ post.comment_set.count }} Comments</h4>
+                    <h4 class="comments-count">{{ post.comment_set.count }} دیدگاه </h4>
                     {% else %}
-                    <h4 class="comments-count">{{ post.comment_set.count }} Comment</h4>
+                    <h4 class="comments-count">{{ post.comment_set.count }} دیدگاه</h4>
                     {% endif %}
 
                     {% for comment in post.comment_set.all %}
@@ -100,10 +105,11 @@
 
                             <div class="comment-img">
                                 {% if comment.author.photo and comment.author.photo.url %}
-                                <img src="{{ comment.author.photo.url }}" alt="Photo of {{ comment.author.username }}">
+                                <img src="{{ comment.author.photo.url }}" class="comment-avatar"
+                                    alt="Photo of {{ comment.author.username }}">
                                 {% else %}
-                                <img src="{% static 'assets/img/default-avatar.png' %}" alt=""
-                                    style="width:60px; height:60px;">
+                                <img src="{% static 'assets/img/default-avatar.png' %}" class="comment-avater"
+                                    alt="defult-avatar" style="width:60px; height:60px;">
                                 {% endif %}
                             </div>
 
@@ -119,12 +125,12 @@
 
                     {% if user.is_authenticated %}
                     <div class="reply-form">
-                        <h4>{{ user.username }} Leave a Reply</h4>
+                        <h4>{{ user.username }} دیدگاهی بگذارید</h4>
                         <p>Your email address will not be published. Required fields are marked * </p>
                         <form method="post">
                             {% csrf_token %}
                             {{ form | crispy }}
-                            <button type="submit" class="btn btn-primary">Post Comment</button>
+                            <button type="submit" class="btn btn-primary">پست کردن</button>
                         </form>
 
                     </div>

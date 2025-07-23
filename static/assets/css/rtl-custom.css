@@ -1,0 +1,221 @@
+/* =======================================================
+* Custom RTL CSS File for Moderna Template
+* This file overrides default LTR styles for RTL layout.
+======================================================== */
+
+/*--------------------------------------------------------------
+# General & Font
+--------------------------------------------------------------*/
+body {
+    direction: rtl;
+    text-align: right;
+    /* برای خوانایی بهتر، می‌توانید یک فونت فارسی زیبا مانند وزیرمتن را به پروژه خود اضافه کنید */
+    /* font-family: 'Vazirmatn', sans-serif; */
+  }
+  
+  /*--------------------------------------------------------------
+  # Back to top button
+  --------------------------------------------------------------*/
+  .back-to-top {
+    right: auto;
+    left: 15px;
+  }
+  
+  /*--------------------------------------------------------------
+  # Navigation Menu
+  --------------------------------------------------------------*/
+  .navbar a,
+  .navbar a:focus {
+    padding: 10px 30px 10px 0;
+  }
+  
+  .navbar a i,
+  .navbar a:focus i {
+    margin-left: 0;
+    margin-right: 5px;
+  }
+  
+  .navbar .dropdown ul {
+    left: auto;
+    right: 14px;
+  }
+  
+  .navbar .dropdown .dropdown ul {
+    left: auto;
+    right: calc(100% - 30px);
+  }
+  
+  .navbar .dropdown .dropdown:hover>ul {
+    left: auto;
+    right: 100%;
+  }
+  
+  @media (max-width: 1366px) {
+    .navbar .dropdown .dropdown ul {
+      right: -90%;
+      left: auto;
+    }
+  
+    .navbar .dropdown .dropdown:hover>ul {
+      right: -100%;
+      left: auto;
+    }
+  }
+  
+  /* Mobile Navigation */
+  .mobile-nav-toggle {
+    right: auto;
+    left: 15px;
+  }
+  
+  .navbar-mobile .mobile-nav-toggle {
+    right: auto;
+    left: 15px;
+  }
+  
+  /*--------------------------------------------------------------
+  # Breadcrumbs
+  --------------------------------------------------------------*/
+  .breadcrumbs ol li+li {
+    padding-left: 0;
+    padding-right: 10px;
+  }
+  
+  .breadcrumbs ol li+li::before {
+    padding-right: 0;
+    padding-left: 10px;
+    float: right; /* To keep it before the list item text in RTL */
+  }
+  
+  /*--------------------------------------------------------------
+  # Why Us Section
+  --------------------------------------------------------------*/
+  .why-us .icon-box .icon {
+    float: right;
+  }
+  
+  .why-us .icon-box .title {
+    margin-left: 0;
+    margin-right: 95px;
+  }
+  
+  .why-us .icon-box .description {
+    margin-left: 0;
+    margin-right: 95px;
+  }
+  
+  /*--------------------------------------------------------------
+  # Blog
+  --------------------------------------------------------------*/
+  .blog .entry .entry-meta ul li+li {
+    padding-left: 0;
+    padding-right: 20px;
+  }
+  
+  .blog .entry .entry-meta i {
+    margin-right: 0;
+    margin-left: 8px;
+  }
+  
+  .blog .entry .entry-content .read-more {
+    text-align-last: left;
+  }
+  
+  .blog .entry .entry-content blockquote::after {
+    left: auto;
+    right: 0;
+  }
+  
+  .blog .entry .entry-footer .cats {
+    padding: 0 0 0 20px;
+  }
+  
+  .blog .entry .entry-footer .tags li+li::before {
+    padding-right: 0;
+    padding-left: 6px;
+  }
+  
+  .blog .entry .entry-footer .share i {
+    padding-left: 0;
+    padding-right: 5px;
+  }
+  
+  .blog .blog-author img {
+    margin-right: 0;
+    margin-left: 20px;
+    float: right;
+  }
+  
+  .blog .blog-comments .comment .comment-img {
+    margin-right: 0;
+    margin-left: 14px;
+  }
+  
+  .blog .blog-comments .comment.comment-reply {
+    padding-left: 0;
+    padding-right: 40px;
+  }
+  
+  /* Sidebar */
+  .blog .sidebar {
+    margin-left: 0;
+    margin-right: 20px;
+  }
+  
+  .blog .sidebar .search-form form button {
+    right: auto;
+    left: 0;
+    border-radius: 4px 0 0 4px;
+  }
+  
+  .blog .sidebar .categories ul a span {
+    padding-left: 0;
+    padding-right: 5px;
+  }
+  
+  .blog .sidebar .recent-posts img {
+    float: right;
+  }
+  
+  .blog .sidebar .recent-posts h4 {
+    margin-left: 0;
+    margin-right: 95px;
+  }
+  
+  .blog .sidebar .recent-posts time {
+    margin-left: 0;
+    margin-right: 95px;
+  }
+  
+  .blog .sidebar .tags ul a {
+    margin: 0 0 8px 6px;
+  }
+  
+  /*--------------------------------------------------------------
+  # Footer
+  --------------------------------------------------------------*/
+  #footer .footer-newsletter form input[type=submit] {
+    right: auto;
+    left: 0;
+  }
+  
+  #footer .footer-top .social-links a {
+    margin-right: 0;
+    margin-left: 4px;
+  }
+  
+  #footer .footer-top .footer-links ul i {
+    padding-right: 0;
+    padding-left: 2px;
+  }
+  /* Add these rules at the end of your rtl-custom.css file */
+
+/* --- Fix for Navbar: Logo on Left, Menu on Right --- */
+#header .container {
+  flex-direction: row-reverse;
+}
+
+/* --- Fix for Breadcrumbs: Title on Left, Trail on Right --- */
+.breadcrumbs .d-flex {
+  flex-direction: row-reverse;
+}

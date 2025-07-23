@@ -2,6 +2,7 @@ from django.db import models
 from datetime import date
 from django.utils import timezone
 from django.urls import reverse
+from django.conf import settings
 # Create your models here.
 
 
@@ -34,8 +35,18 @@ class Post(models.Model):
         related_name='posts',     
         verbose_name="Category"
     )
+    likes= models.ManyToManyField(settings.AUTH_USER_MODEL ,
+        related_name= "blog_posts_liked",
+        blank=True ,
+        verbose_name='likes'
+    )
 
-    
+    class Meta:
+        ordering = ['-date']
+        
+    def number_of_likes(self):
+        return self.likes.count()
+        
     def __str__(self):
         return self.title
     def get_absolute_url(self):

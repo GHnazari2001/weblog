@@ -7,11 +7,11 @@
         <div class="container">
   
           <div class="d-flex justify-content-between align-items-center">
-            <h2>Blog</h2>
+            <h2>بلاگ</h2>
   
             <ol>
-              <li><a href="{% url 'home' %}">Home</a></li>
-              <li>Delete post</li>
+              <li><a href="{% url 'home' %}">خانه</a></li>
+              <li>حذف پست</li>
             </ol>
           </div>
   
@@ -28,8 +28,8 @@
   
               <form method="post">
                 {% csrf_token %}                
-                <p>Are you sure you want to delete <strong>"{{ post.title }}"</strong>?</p>
-                <button type="submit" class="btn btn-success">Yes</button>
+                <p>ایا از حذف این پست مطمعن هستید ؟ <strong>"{{ post.title }}"</strong></p>
+                <button type="submit" class="btn btn-success">بله</button>
               </form>
   
             </div><!-- End blog entries list -->            

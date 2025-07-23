@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+from decouple import config
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -115,9 +116,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE =  'fa-ir'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE =  'Asia/Tehran'
 
 USE_I18N = True
 
@@ -144,3 +145,14 @@ LOGOUT_REDIRECT_URL = 'home'
 STATIC_ROOT=os.path.join(BASE_DIR , "assets")
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 465             
+EMAIL_USE_TLS = False       
+EMAIL_USE_SSL = True  
+EMAIL_HOST_USER = config('EMAIL_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_PASSWORD')
+
+# Default email address to send emails from
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

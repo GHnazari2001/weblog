@@ -8,10 +8,10 @@
   <section class="breadcrumbs">
     <div class="container">
       <div class="d-flex justify-content-between align-items-center">
-        <h2>Edit Profile </h2>
+        <h2>ویرایش پروفایل </h2>
         <ol>
-          <li><a href="{% url 'home' %}">Home</a></li>
-          <li><a href="{% url 'profile' %}">Profile</a></li>
+          <li><a href="{% url 'home' %}">خانه</a></li>
+          <li><a href="{% url 'profile' %}">پروفایل</a></li>
           <li>Edit</li>
         </ol>
       </div>
@@ -20,14 +20,14 @@
     <div class="container" data-aos="fade-up">
       <div class="row justify-content-center"> {# برای وسط‌چین کردن محتوا اگر col-lg-12 نیست #}
         <div class="col-lg-8"> {# یا col-lg-12 اگر می‌خواهید تمام عرض باشد مثل new_post.html #}
-          <h3 class="text-center mb-4">Edit Profile Form </h3>
+          <h3 class="text-center mb-4">ویرایش پروفایل </h3>
           <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form | crispy }} {# استفاده از crispy_forms برای رندر کردن فرم #}
             <br>
             <div class="text-center"> {# برای وسط چین کردن دکمه‌ها #}
                 <input type="submit" value=" Save" class="btn btn-primary"> {# یا btn-success مثل new_post #}
-                <a href="{% url 'profile' %}" class="btn btn-secondary ms-2">Cancel</a>
+                <a href="{% url 'profile' %}" class="btn btn-secondary ms-2">لغو</a>
             </div>
           </form>
         </div>

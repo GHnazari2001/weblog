@@ -2,26 +2,27 @@
 
 <div class="sidebar">
   
-    <h3 class="sidebar-title">Search</h3>
+    <h3 class="sidebar-title">جستجو</h3>
     <div class="sidebar-item search-form">
       <form action="{% url 'search_results' %}" method="GET">
-        <input type="text" name="q" placeholder="Search...">
+        <input type="text" name="q" placeholder="جستجو...">
         <button type="submit"><i class="bi bi-search"></i></button>
       </form>
-    </div><h3 class="sidebar-title">Categories</h3>
+    </div><h3 class="sidebar-title">دسته بندی</h3>
     <div class="sidebar-item categories">
       <ul>
         {% for category_item in all_categories_sidebar %}
           <li>
-            <a href="{{ category_item.get_absolute_url }}">{{ category_item.name }} <span>({{ category_item.num_posts }})</span></a>
+            <a href="{% url 'posts_by_category' category_item.slug %}">{{ category_item.name }} <span>({{ category_item.num_posts }})</span></a>
+            
           </li>
         {% empty %}
-          <li>No categories found.</li>
+          <li>دسته بندی یافت نشد</li>
         {% endfor %}
       </ul>
     </div><!-- End sidebar categories-->
 
-    <h3 class="sidebar-title">Recent Posts</h3>
+    <h3 class="sidebar-title">پست های اخیر</h3>
     
     {% if recent_posts %}
         <div class="sidebar-item recent-posts">
@@ -34,12 +35,12 @@
             {% endfor %}
         </div><!-- End sidebar recent posts-->
     {% else %}                 
-      <p>No blog post is available!</p>
+      <p>پستی موجود نیست</p>
     {% endif %}
 
     
 
-    <h3 class="sidebar-title">Tags</h3>
+    <h3 class="sidebar-title">تگ ها</h3>
     <div class="sidebar-item tags">
       <ul>
         <li><a href="#">App</a></li>

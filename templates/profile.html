@@ -9,8 +9,8 @@
       <div class="d-flex justify-content-between align-items-center">
         <h2>پروفایل کاربری</h2>
         <ol>
-          <li><a href="{% url 'home' %}">Home</a></li>
-          <li>Profile </li>
+          <li><a href="{% url 'home' %}">خانه</a></li>
+          <li>پروفایل</li>
         </ol>
       </div>
     </div>
@@ -52,29 +52,29 @@
             <div class="profile-fields px-md-3">
               
               <dl class="row">
-                <dt class="col-sm-3 text-sm-end">first name:</dt>
+                <dt class="col-sm-3 text-sm-end">نام :</dt>
                 <dd class="col-sm-9 profile-field-value">{{ user_profile.first_name|default:"" }}</dd>
 
-                <dt class="col-sm-3 text-sm-end">last name:</dt>
+                <dt class="col-sm-3 text-sm-end">نام خانوادگی:</dt>
                 <dd class="col-sm-9 profile-field-value">{{ user_profile.last_name|default:"" }}</dd>
 
-                <dt class="col-sm-3 text-sm-end"> username:</dt>
+                <dt class="col-sm-3 text-sm-end"> نام کاربری:</dt>
                 <dd class="col-sm-9 profile-field-value">{{ user_profile.username|default:"" }}</dd>
 
-                <dt class="col-sm-3 text-sm-end">email:</dt>
+                <dt class="col-sm-3 text-sm-end">ایمیل:</dt>
                 <dd class="col-sm-9 profile-field-value">{{ user_profile.email|default:"" }}</dd>
 
-                <dt class="col-sm-3 text-sm-end">age:</dt>
+                <dt class="col-sm-3 text-sm-end">سن:</dt>
                 <dd class="col-sm-9 profile-field-value">{{ user_profile.age|default:"" }}</dd>
 
-                <dt class="col-sm-3 text-sm-end"> about:</dt>
+                <dt class="col-sm-3 text-sm-end"> درباره من:</dt>
                 <dd class="col-sm-9 profile-field-value">{{ user_profile.about|linebreaksbr|default:"" }}</dd>
               </dl>
             </div>
             
 
             <div class="text-center mt-4">
-              <a href="{% url 'profile_edit' %}" class="btn btn-primary"><i ></i> edit </a>
+              <a href="{% url 'profile_edit' %}" class="btn btn-primary"><i ></i> ویرایش</a>
             </div>
 
           </article></div>

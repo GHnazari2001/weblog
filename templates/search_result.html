@@ -6,10 +6,10 @@
      <section class="breadcrumbs">
         <div class="container">
           <div class="d-flex justify-content-between align-items-center">
-            <h2> Search </h2>
+            <h2> جستجو </h2>
             <ol>
-              <li><a href="{% url 'home' %}">Home</a></li>
-              <li>Search</li>
+              <li><a href="{% url 'home' %}">خانه</a></li>
+              <li>جستجو</li>
             </ol>
           </div>
         </div>
@@ -48,7 +48,7 @@
                         {{ post.excerpt }}
                       </p>
                       <div class="read-more">
-                        <a href="{% url 'post_detail' post.pk %}">Read More</a>
+                        <a href="{% url 'post_detail' post.pk %}">خواندن بیشتر</a>
                       </div>
                     </div>
                   </article>{% endfor %}

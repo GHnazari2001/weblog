@@ -9,9 +9,10 @@
                 {% csrf_token %}
                 {{ form | crispy }}
                 <br>
-                <button type="submit" class="btn btn-success">Login</button>
+                <button type="submit" class="btn btn-success">ورود</button>
                 <br><br>
-                <a href="{% url 'password_reset'%}"> forget password !</a>
+                <a href="{% url 'password_reset'%}"> فراموشی رمز</a>
+                <br>
             </form>
           
     </div>
