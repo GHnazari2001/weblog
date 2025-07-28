@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %} پست های: {{ author.username }}{% endblock %}
+
+{% block content %}
+<section class="breadcrumbs">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <h2> پست های : {{ author.username }}</h2>
+            <ol>
+                <li><a href="{% url 'home' %}"> خانه</a></li>
+                <li> نویسنده </li>
+                <li>{{ author.username }}</li>
+            </ol>
+        </div>
+    </div>
+</section>
+
+<section id="blog" class="blog">
+    <div class="container" data-aos="fade-up">
+        <div class="row">
+            <div class="col-lg-8 entries">
+
+                {% for post in post_list %}
+                <article class="entry">
+
+                    <div class="entry-img">
+                      <img src="{{ post.photo.url }}" alt="" class="img-fluid">
+                    </div>
+          
+                    <h2 class="entry-title">
+                      <a href="{% url 'post_detail' post.pk  %}">{{ post.title }}</a>
+                    </h2>
+          
+                    {# In templates/post_detail.html #}
+                    <div class="entry-meta">
+                      <ul>
+                        <li class="d-flex align-items-center"><i class="bi bi-person"></i> <a href="#">{{ post.author.username }}</a></li>
+                        <li class="d-flex align-items-center"><i class="bi bi-clock"></i> <a href="#"><time
+                              datetime="{{ post.date|date:" Y-m-d" }}">{{ post.date|date:"SHORT_DATE_FORMAT" }}</time></a></li>
+                        {% if post.category %}
+                        <li class="d-flex align-items-center"><i class="bi bi-folder"></i> <a
+                            href="{{ post.category.get_absolute_url }}">{{ post.category.name }}</a></li>
+                        {% endif %}
+          
+                        {# New Section for Likes #}
+                        <li class="d-flex align-items-center like-section" data-post-id="{{ post.pk }}">
+                          <a href="#" class="like-button">
+                            <i class="bi {% if user in post.likes.all %}bi-heart-fill{% else %}bi-heart{% endif %}"></i>
+                          </a>
+                          <span class="like-count">{{ post.number_of_likes }}</span>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="entry-content">
+                      <p>
+                        {{ post.excerpt }}
+                      </p>
+                      <div class="read-more">
+                        <a href="{% url 'post_detail' post.pk  %}">خواندن بیشتر</a>
+                      </div>
+                    </div>
+          
+                  </article><!-- End blog entry -->
+                {% empty %}
+                <p>{{ author.username }} هنوز پستی منتشر نکرده است.</p>
+                {% endfor %}
+
+                {% include 'pagination.html' %}
+
+            </div>
+            <div class="col-lg-4">
+                {% include 'sidebar.html' %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

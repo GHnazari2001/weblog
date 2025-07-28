@@ -1,60 +1,56 @@
 {% load static %}
 
 <div class="sidebar">
+
+  <h3 class="sidebar-title">جستجو</h3>
+  <div class="sidebar-item search-form">
+    <form action="{% url 'search_results' %}" method="GET">
+      <input type="text" name="q" placeholder="جستجو...">
+      <button type="submit"><i class="bi bi-search"></i></button>
+    </form>
+  </div>
+  <h3 class="sidebar-title">دسته بندی</h3>
+  <div class="sidebar-item categories">
+    <ul>
+      {% for category_item in all_categories_sidebar %}
+      <li>
+        <a href="{% url 'posts_by_category' category_item.slug %}">{{ category_item.name }} <span>({{ category_item.num_posts }})</span></a>
+
+      </li>
+      {% empty %}
+      <li>دسته بندی یافت نشد</li>
+      {% endfor %}
+    </ul>
+  </div><!-- End sidebar categories-->
+
+  <h3 class="sidebar-title">پست های اخیر</h3>
+
+  {% if recent_posts %}
+  <div class="sidebar-item recent-posts">
+    {% for post in recent_posts %}
+    <div class="post-item clearfix">
+      <img src="{{ post.photo.url }}" alt="">
+      <h4><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h4>
+      <time datetime="2020-01-01">{{ post.date}}</time>
+    </div>
+    {% endfor %}
+  </div><!-- End sidebar recent posts-->
+  {% else %}
+  <p>پستی موجود نیست</p>
+  {% endif %}
+
+
+
+  <h3 class="sidebar-title">تگ ها</h3>
   
-    <h3 class="sidebar-title">جستجو</h3>
-    <div class="sidebar-item search-form">
-      <form action="{% url 'search_results' %}" method="GET">
-        <input type="text" name="q" placeholder="جستجو...">
-        <button type="submit"><i class="bi bi-search"></i></button>
-      </form>
-    </div><h3 class="sidebar-title">دسته بندی</h3>
-    <div class="sidebar-item categories">
-      <ul>
-        {% for category_item in all_categories_sidebar %}
-          <li>
-            <a href="{% url 'posts_by_category' category_item.slug %}">{{ category_item.name }} <span>({{ category_item.num_posts }})</span></a>
-            
-          </li>
-        {% empty %}
-          <li>دسته بندی یافت نشد</li>
-        {% endfor %}
-      </ul>
-    </div><!-- End sidebar categories-->
+  <div class="sidebar-item tags">
+    <ul>
+      {% for tag in all_tags_sidebar %}
+      <li><a href="{% url 'posts_by_tag' tag.slug %}">{{ tag.name }}</a></li>
+      {% empty %}
+      <li> No tags found.</li>
+      {% endfor %}
+    </ul>
+  </div>
 
-    <h3 class="sidebar-title">پست های اخیر</h3>
-    
-    {% if recent_posts %}
-        <div class="sidebar-item recent-posts">
-            {% for post in recent_posts %}
-                <div class="post-item clearfix">
-                    <img src="{{ post.photo.url }}" alt="">
-                    <h4><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h4>
-                    <time datetime="2020-01-01">{{ post.date}}</time>
-                </div> 
-            {% endfor %}
-        </div><!-- End sidebar recent posts-->
-    {% else %}                 
-      <p>پستی موجود نیست</p>
-    {% endif %}
-
-    
-
-    <h3 class="sidebar-title">تگ ها</h3>
-    <div class="sidebar-item tags">
-      <ul>
-        <li><a href="#">App</a></li>
-        <li><a href="#">IT</a></li>
-        <li><a href="#">Business</a></li>
-        <li><a href="#">Mac</a></li>
-        <li><a href="#">Design</a></li>
-        <li><a href="#">Office</a></li>
-        <li><a href="#">Creative</a></li>
-        <li><a href="#">Studio</a></li>
-        <li><a href="#">Smart</a></li>
-        <li><a href="#">Tips</a></li>
-        <li><a href="#">Marketing</a></li>
-      </ul>
-    </div><!-- End sidebar tags-->
-
-  </div><!-- End sidebar -->
+</div><!-- End sidebar -->

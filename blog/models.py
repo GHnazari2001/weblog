@@ -3,6 +3,7 @@ from datetime import date
 from django.utils import timezone
 from django.urls import reverse
 from django.conf import settings
+from taggit.managers import TaggableManager
 # Create your models here.
 
 
@@ -25,21 +26,22 @@ class Category(models.Model):
 
 
 class Post(models.Model):
-    title = models.CharField(max_length=255)
-    excerpt = models.TextField()
-    body = models.TextField()
-    author = models.ForeignKey('account.CustomUser', on_delete=models.CASCADE)
-    date = models.DateField(default=date.today)
-    photo = models.ImageField(upload_to='photo/%Y/%m/%d')
+    title = models.CharField(max_length=255 , verbose_name="عنوان")
+    excerpt = models.TextField(verbose_name="خلاصه")
+    body = models.TextField(verbose_name="متن کامل")
+    author = models.ForeignKey('account.CustomUser', on_delete=models.CASCADE , verbose_name="نویسنده")
+    date =date = models.DateTimeField(auto_now_add=True, verbose_name="تاریخ انتشار")
+    photo = models.ImageField(upload_to='photo/%Y/%m/%d' ,  verbose_name="تصویر ")
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True,blank=True,             
         related_name='posts',     
-        verbose_name="Category"
+        verbose_name="دسته‌بندی"
     )
     likes= models.ManyToManyField(settings.AUTH_USER_MODEL ,
         related_name= "blog_posts_liked",
         blank=True ,
-        verbose_name='likes'
+        verbose_name='پسندیدن'
     )
+    tags = TaggableManager()
 
     class Meta:
         ordering = ['-date']
@@ -55,10 +57,10 @@ class Post(models.Model):
     
 
 class Comment(models.Model):
-    author = models.ForeignKey('account.CustomUser', on_delete=models.CASCADE)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    body = models.TextField(null=False, blank=False)
-    date = models.DateTimeField(default=timezone.now)
+    author = models.ForeignKey('account.CustomUser', on_delete=models.CASCADE ,verbose_name="نویسنده")
+    post = models.ForeignKey(Post, on_delete=models.CASCADE , verbose_name=" پست")
+    body = models.TextField(null=False, blank=False ,verbose_name="متن دیدگاه")
+    date = models.DateTimeField(default=timezone.now , verbose_name="تاریخ انتشار")
 
     def __str__(self):
         return self.body

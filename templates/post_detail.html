@@ -40,14 +40,19 @@
 
                     <div class="entry-meta">
                         <ul>
-                            <li class="d-flex align-items-center"><i class="bi bi-person"></i> <a href="#">{{post.author }}</a></li>
+                            <li class="d-flex align-items-center"><i class="bi bi-person"></i> <a href="{% url 'posts_by_author' post.author.username %}">{{post.author.username}}</a></li>
                             <li class="d-flex align-items-center"><i class="bi bi-clock"></i> <a href="#"><time
-                                datetime="{{ post.date|date:" Y-m-d" }}">{{ post.date|date:"SHORT_DATE_FORMAT" }}</time></a></li>
-                            <li class="d-flex align-items-center"><i class="bi bi-chat-dots"></i> {{post.comment_set.count }}</li>
+                                        datetime="{{ post.date|date:" Y-m-d" }}">{{ post.date|date:"SHORT_DATE_FORMAT" }}</time></a></li>
+                            {% if post.category %}
+                             <li class="d-flex align-items-center"><i class="bi bi-folder"></i> <a
+                                     href="{{ post.category.get_absolute_url }}">{{ post.category.name }}</a></li>
+                            {% endif %}
+                            <li class="d-flex align-items-center"><i class="bi bi-chat-dots"></i>
+                                {{post.comment_set.count }}</li>
                             <li class="d-flex align-items-center like-section" data-post-id="{{ post.pk }}">
                                 <a href="#" class="like-button">
                                     <i
-                                        class="bi {% if user in post.likes.all %}bi-heart-fill{% else %}bi-heart{% endif %}"></i>
+                                        class="bi {% if user in post.likes.all %}bi-heart-fill{% else %}bi-heart {% endif %}"></i>
                                 </a>
                                 <span class="like-count">{{ post.number_of_likes }}</span>
                             </li>
@@ -72,25 +77,29 @@
                 </article><!-- End blog entry -->
 
                 <div class="blog-author d-flex align-items-center">
+  
                     {% if post.author.photo and post.author.photo.url %}
-                    <img src="{{ post.author.photo.url }}" class="rounded-circle float-left"
-                        alt="Photo of {{ post.author.username }}">
+                      <img src="{{ post.author.photo.url }}" class="rounded-circle" alt="Photo of {{ post.author.username }}" style="width:80px; height:80px; object-fit: cover;">
                     {% else %}
-                    <img src="{% static 'assets/img/default-avatar.png' %}" class="rounded-circle float-left" alt=""
-                        style="width:80px; height:80px;">
+                      <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 80px; height: 80px; background-color: #e9ecef;">
+                        <i class="bi bi-person-fill" style="font-size: 40px; color: #495057;"></i>
+                      </div>
                     {% endif %}
-
-                    <div>
-                        <h4>{{post.author.first_name}}</h4>
-                        <div class="social-links">
-                            <a href="https://twitters.com/#"><i class="bi bi-twitter"></i></a>
-                            <a href="https://facebook.com/#"><i class="bi bi-facebook"></i></a>
-                            <a href="https://instagram.com/#"><i class="biu bi-instagram"></i></a>
-                        </div>
-
+                  
+                    <div style="margin-right: 20px;">
+                      <h4><a href="{% url 'posts_by_author' post.author.username %}">{{ post.author.username }}</a></h4>
+                      <div class="social-links">
+                        <a href="https://twitters.com/#"><i class="bi bi-twitter"></i></a>
+                        <a href="https://facebook.com/#"><i class="bi bi-facebook"></i></a>
+                        <a href="https://instagram.com/#"><i class="biu bi-instagram"></i></a>
+                      </div>
+                      <p>
+                        {{ post.author.about|default:"" }}
+                      </p>
                     </div>
-                </div><!-- End blog author bio -->
-
+                  
+                </div>
+                
                 <div class="blog-comments">
 
                     {% if post.comment_set.count > 1 %}
@@ -102,17 +111,15 @@
                     {% for comment in post.comment_set.all %}
                     <div id="comment-1" class="comment">
                         <div class="d-flex">
-
                             <div class="comment-img">
                                 {% if comment.author.photo and comment.author.photo.url %}
-                                <img src="{{ comment.author.photo.url }}" class="comment-avatar"
-                                    alt="Photo of {{ comment.author.username }}">
+                                  <img src="{{ comment.author.photo.url }}" alt="Photo of {{ comment.author.username }}" class="comment-avatar" style="width:60px; height:60px; border-radius: 50%; object-fit: cover;">
                                 {% else %}
-                                <img src="{% static 'assets/img/default-avatar.png' %}" class="comment-avater"
-                                    alt="defult-avatar" style="width:60px; height:60px;">
+                                  <div class="d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; background-color: #e9ecef; border-radius: 50%;">
+                                    <i class="bi bi-person-fill" style="font-size: 30px; color: #495057;"></i>
+                                  </div>
                                 {% endif %}
-                            </div>
-
+                         </div>
 
                             <div>
                                 <h5>{{ comment.author }}</h5>

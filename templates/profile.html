@@ -74,7 +74,9 @@
             
 
             <div class="text-center mt-4">
-              <a href="{% url 'profile_edit' %}" class="btn btn-primary"><i ></i> ویرایش</a>
+              <a href="{% url 'password_change' %}" class="btn btn-primary"><i ></i> تغییر رمز</a>
+              <a href="{% url 'password_reset' %}" class="btn btn-primary"><i ></i> ریست رمز</a>
+              <a href="{% url 'profile_edit' %}" class="btn btn-primary"><i ></i> ویرایش مشخصات</a>
             </div>
 
           </article></div>
@@ -98,5 +100,6 @@
       }
     }
   </style>
+
 
 {% endblock content %}

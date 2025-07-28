@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     
     'blog',
     'account',
+    'taggit',
 ]
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
 CRISPY_TEMPLATE_PACK = "bootstrap4"
@@ -146,13 +147,13 @@ STATIC_ROOT=os.path.join(BASE_DIR , "assets")
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 465             
-EMAIL_USE_TLS = False       
-EMAIL_USE_SSL = True  
-EMAIL_HOST_USER = config('EMAIL_USER')
-EMAIL_HOST_PASSWORD = config('EMAIL_PASSWORD')
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 465             
+# EMAIL_USE_TLS = False       
+# EMAIL_USE_SSL = True  
+# EMAIL_HOST_USER = config('EMAIL_USER')
+# EMAIL_HOST_PASSWORD = config('EMAIL_PASSWORD')
 
-# Default email address to send emails from
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+# # Default email address to send emails from
+# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

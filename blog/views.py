@@ -1,110 +1,89 @@
-from django.shortcuts import render,get_object_or_404
-from django.views.generic import View ,CreateView,DetailView,FormView,ListView
-from django.views.generic.edit import UpdateView, DeleteView
-from .models import Post,Category,Comment
-from .forms import PostForm,CommentForm
-from django.urls import reverse_lazy,reverse
-from django.core.paginator import Paginator
+
+
+from django.shortcuts import get_object_or_404, redirect
+from django.views.generic import (
+    ListView, DetailView, CreateView, UpdateView, DeleteView, FormView, View,TemplateView
+)
+from django.urls import reverse_lazy, reverse
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.http import JsonResponse, HttpResponseForbidden
 from django.views.generic.detail import SingleObjectMixin
 from django.db.models import Q
-from django.contrib.auth.mixins import LoginRequiredMixin 
-from django.http import JsonResponse
-from django.contrib.auth.mixins import UserPassesTestMixin
 
-# Create your views here.
+from .models import Post, Category
+from .forms import PostForm, CommentForm
+from taggit.models import Tag
+from account.models import CustomUser
 
-# class HomeView(View):
-#     #model = Post
-#     template_name = 'home.html'
-#     paginate_by = 2
-    
-#     def get(self ,request):
-#         posts = Post.objects.all()
-#         paginator = Paginator(posts ,self.paginate_by)
-#         page_number = request.GET.get('page')
-#         page_obj = paginator.get_page(page_number)
-       
-#         return render(request ,self.template_name , {'post_list': page_obj})
-# A cleaner HomeView using ListView
+
 class HomeView(ListView):
     model = Post
     template_name = 'home.html'
     context_object_name = 'post_list'
-    paginate_by = 2
+    paginate_by = 3
 
+    def get_queryset(self):
+       
+        return Post.objects.select_related('author', 'category').prefetch_related('tags').order_by('-date')
+
+class AboutView(TemplateView):
+    template_name = "about.html"
+
+class ContactView(TemplateView):
+    template_name = "contact.html"
     
-class CommentGet(DetailView):
+
+class PostDetailView(DetailView):
     model = Post
     template_name = 'post_detail.html'
+    context_object_name = 'post'
 
     def get_context_data(self, **kwargs):
+        # اضافه کردن فرم دیدگاه به context
         context = super().get_context_data(**kwargs)
-        context["form"] = CommentForm()
+        context['form'] = CommentForm()
         return context
 
-class PostDetailView(View):
-
-    def get(self, request, *args, **kwargs):
-        view = CommentGet.as_view()
-        return view(request, *args, **kwargs)
-
     def post(self, request, *args, **kwargs):
-        view = CommentPost.as_view()
-        return view(request, *args, **kwargs)
-    
-
-class CommentPost(SingleObjectMixin, FormView):
-    model = Post
-    form_class = CommentForm
-    template_name = "post_detail.html"
-
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        return super().post(request, *args, **kwargs)
-
-    def form_valid(self, form):
-        comment = form.save(commit=False)
-        comment.post = self.object
-        comment.author = self.request.user
-        comment.save()
-        return super().form_valid(form)
-
-    def get_success_url(self):
+        if not request.user.is_authenticated:
+            return HttpResponseForbidden()
+        
         post = self.get_object()
-        return reverse("post_detail", kwargs={'pk': post.pk})
+        form = CommentForm(request.POST)
 
-    
-    
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.author = request.user
+            comment.save()
+            return redirect('post_detail', pk=post.pk)
+        else:
+            # اگر فرم نامعتبر بود، صفحه را با فرم و خطاهایش نمایش بده
+            context = self.get_context_data()
+            context['form'] = form
+            return self.render_to_response(context)
 
-# class PostNewView(CreateView):
-#     model = Post
-#     template_name = 'new_post.html'
-#     form_class = PostForm
-#     success_url =reverse_lazy('home')
-    
-class PostNewView(LoginRequiredMixin, CreateView): 
+
+class PostNewView(LoginRequiredMixin, CreateView):
     model = Post
-    template_name = 'new_post.html'
     form_class = PostForm
-    success_url = reverse_lazy('home')
-   
-
+    template_name = 'new_post.html'
+    
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
-# Add this import at the top
-from django.contrib.auth.mixins import UserPassesTestMixin
 
 class UpdatePostView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
-    template_name = 'update_post.html'
     form_class = PostForm
+    template_name = 'update_post.html'
 
     def test_func(self):
+        # کاربر فقط در صورتی می‌تواند پست را ویرایش کند که نویسنده آن باشد
+        obj = self.get_object()
+        return obj.author == self.request.user
 
-        post = self.get_object()
-        return self.request.user == post.author
 
 class DeletePostView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Post
@@ -112,85 +91,96 @@ class DeletePostView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     success_url = reverse_lazy('home')
 
     def test_func(self):
-    
-        post = self.get_object()
-        return self.request.user == post.author    
-    
-    
-    
-    
-# class UpdatePostView(UpdateView):
-#     model = Post
-#     template_name = 'update_post.html'
-#     fields = ['title', 'excerpt', 'body','photo']
-    
+        obj = self.get_object()
+        return obj.author == self.request.user
 
 
-# class DeletePostView(DeleteView):
-#     model = Post
-#     template_name = 'delete_post.html'
-#     success_url = reverse_lazy('home')
+class LikePostView(LoginRequiredMixin, View):
+    def post(self, request, pk, *args, **kwargs):
+        post = get_object_or_404(Post, pk=pk)
+        user = request.user
+        
+        is_liked = post.likes.filter(id=user.id).exists()
+
+        if is_liked:
+            post.likes.remove(user)
+        else:
+            post.likes.add(user)
+
+        return JsonResponse({
+            'is_liked': not is_liked,
+            'likes_count': post.number_of_likes(),
+        })
+
+
+class AuthorPostListView(ListView):
+    model = Post
+    template_name = 'author_posts.html'
+    context_object_name = 'post_list'
+    paginate_by = 5
+
+    def get_queryset(self):
+        # گرفتن نویسنده از URL و فیلتر کردن پست‌ها
+        self.author = get_object_or_404(CustomUser, username=self.kwargs['username'])
+        
+        return Post.objects.filter(author=self.author).select_related('author', 'category').prefetch_related('tags').order_by('-date')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['author'] = self.author
+        return context
+
+
+class TaggedPostListView(ListView):
+    model = Post
+    template_name = 'posts_by_tag.html'
+    context_object_name = 'post_list'
+    paginate_by = 5
+
+    def get_queryset(self):
+        self.tag = get_object_or_404(Tag, slug=self.kwargs['tag_slug'])
+    
+        return Post.objects.filter(tags__in=[self.tag]).select_related('author', 'category').prefetch_related('tags').order_by('-date')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tag_name'] = self.tag.name
+        return context
+
+
+class CategoryPostListView(ListView):
+    model = Post
+    template_name = 'category_posts.html'
+    context_object_name = 'post_list'
+    paginate_by = 5
+
+    def get_queryset(self):
+        self.category = get_object_or_404(Category, slug=self.kwargs['category_slug'])
+        
+        return Post.objects.filter(category=self.category).select_related('author', 'category').prefetch_related('tags').order_by('-date')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['category'] = self.category
+        return context
+
 
 class SearchView(ListView):
     model = Post
     template_name = 'search_result.html'
     context_object_name = 'post_list'
-    paginate_by = 2 # یا هر تعداد که برای صفحه‌بندی در نظر دارید
+    paginate_by = 5
 
     def get_queryset(self):
-        query = self.request.GET.get('q') # دریافت عبارت جستجو
-        
-        if query: 
-            queryset = Post.objects.filter(
-                Q(title__icontains=query) | 
-                Q(body__icontains=query) | 
-                Q(excerpt__icontains=query)
-            ).order_by('-date').distinct() 
-        else:
-            
-            queryset = Post.objects.none()
-            
-        return queryset 
+        query = self.request.GET.get('q')
+        if query:
+            # بهینه‌سازی
+            return Post.objects.filter(
+                Q(title__icontains=query) | Q(body__icontains=query)
+            ).select_related('author', 'category').prefetch_related('tags').order_by('-date')
+        return Post.objects.none()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['query'] = self.request.GET.get('q', '')
-    
-class CategoryPostListView(ListView):
-    model = Post
-    template_name = 'category_posts.html'
-    context_object_name = 'post_list'
-    paginate_by = 2 
-
-    def get_queryset(self):
-
-        self.category = get_object_or_404(Category, slug=self.kwargs['category_slug'])
-        queryset = Post.objects.filter(category=self.category).order_by('-date')
-        return queryset
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-      
-        context['category'] = self.category
         return context
-    
-    
-class LikePostView(LoginRequiredMixin , View):
-    def post(self,request ,pk,*args, **kwargs):
-        post = get_object_or_404(Post , pk = pk)
-        user = self.request.user
-        
-        is_liked = False
-        if user in post.likes.all():
-            post.likes.remove(user)
-            is_liked = False
-        else :
-            post.likes.add(user)
-            is_liked = True
-        response_data = {
-            'is_liked': is_liked,
-            'likes_count': post.number_of_likes(),
-        }
-        
-        return JsonResponse(response_data)
-    

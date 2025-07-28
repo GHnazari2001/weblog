@@ -1,0 +1,30 @@
+{% if is_paginated %}
+<div class="blog-pagination">
+  <ul class="justify-content-center">
+
+    {# --- دکمه صفحه قبل --- #}
+    {% if page_obj.has_previous %}
+      <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&laquo;</span></li>
+    {% endif %}
+
+    {# --- شماره صفحات --- #}
+    {% for i in paginator.page_range %}
+      {% if page_obj.number == i %}
+        <li class="active"><a href="?page={{ i }}">{{ i }}</a></li>
+      {% else %}
+        <li><a href="?page={{ i }}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+
+    {# --- دکمه صفحه بعد --- #}
+    {% if page_obj.has_next %}
+      <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&raquo;</span></li>
+    {% endif %}
+
+  </ul>
+</div>
+{% endif %}

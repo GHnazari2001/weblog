@@ -3,14 +3,16 @@ from .models import Post, Comment,Category
 
 
 class PostForm(forms.ModelForm):
+    tags = forms.CharField(
+        label="برچسب‌ها", 
+        required=False, 
+        help_text='تگ‌های مورد نظر را با یک کاما (,) از هم جدا کنید.'
+    )
     class Meta:
         model = Post
-        fields = ['title', 'excerpt', 'body','category', 'date', 'photo']
-        # widgets = {
-           
-        #     'tags': forms.CheckboxSelectMultiple,         # نمایش تگ‌ها به صورت چک‌باکس
-        #     'category': forms.Select(), # این ویجت پیش‌فرض برای ForeignKey است (دراپ‌دان)
-        # }
+        fields = ['title', 'excerpt', 'body','category', 'photo','tags']
+      
+      
     def __init__(self, *args, **kwargs):
      
         user = kwargs.pop('user', None) 

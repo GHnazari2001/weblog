@@ -4,19 +4,6 @@
 {% block content %}
 
 <!-- ======= Blog Section ======= -->
-<section class="breadcrumbs">
-  <div class="container">
-
-    <div class="d-flex justify-content-between align-items-center">
-      <h2>صفحه اصلی</h2>
-
-      <ol>
-        <li><a href="{% url 'home' %}">خانه</a></li>
-      </ol>
-    </div>
-
-  </div>
-</section><!-- End Blog Section -->
 
 <!-- ======= Blog Section ======= -->
 <section id="blog" class="blog">
@@ -47,7 +34,7 @@
               <li class="d-flex align-items-center"><i class="bi bi-folder"></i> <a
                   href="{{ post.category.get_absolute_url }}">{{ post.category.name }}</a></li>
               {% endif %}
-
+              <li class="d-flex align-items-center"><i class="bi bi-chat-dots"></i> {{post.comment_set.count }}</li>
               {# New Section for Likes #}
               <li class="d-flex align-items-center like-section" data-post-id="{{ post.pk }}">
                 <a href="#" class="like-button">
@@ -69,45 +56,9 @@
         </article><!-- End blog entry -->
         {% endfor %}
 
-        {% if post_list.has_other_pages %}
-        <div class="blog-pagination">
-          <ul class="justify-content-center">
-
-            {% if post_list.has_previous %}
-            <li class="page-item">
-              <a href="?page={{ post_list.previous_page_number }}">&laquo</a>
-            </li>
-            {% else %}
-            <li class="page-item disabled">
-              <a class="page-link">&laquo</a>
-            </li>
-            {% endif %}
-
-            {% for i in post_list.paginator.page_range %}
-            {% if post_list.number == i %}
-            <li class="page_item active">
-              <a class="page-link">{{ i }}</a>
-            </li>
-            {% else %}
-            <li class="page-item">
-              <a href="?page={{i}}" class="page-link">{{ i }}</a>
-            </li>
-            {% endif %}
-            {% endfor %}
-
-            {% if post_list.has_next %}
-            <li class="page-item">
-              <a href="?page={{ post_list.next_page_number }}">&raquo</a>
-            </li>
-            {% else %}
-            <li class="page-item disabled">
-              <a class="page-link">&raquo</a>
-            </li>
-            {% endif %}
-
-          </ul>
-        </div>
-        {% endif %}
+        
+        {% include 'pagination.html' %}
+        
 
         {% else %}
         <h2>پستی موجود نیست.</h2>

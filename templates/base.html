@@ -57,22 +57,26 @@
       <nav id="navbar" class="navbar">
         <ul>
           <li><a href="{% url 'home' %}">خانه</a></li>
+          <li> <a href="{% url 'about' %}">درباره ما</a></li>
+          <li> <a href="{% url 'contact' %}">تماس با ما</a></li>
+          
           {% if user.is_authenticated %}
-          <li><a href="{% url 'new_post' %}">اضافه کردن پست</a></li>
-
-          <li class="dropdown"><a href="#">{{ user.username }} <span><i class="bi bi-chevron-down"></i></span></a>
+          <li class="dropdown"><a href="#"><span>{{ user.username }}</span> <i class="bi bi-chevron-down"></i></a>
             <ul>
-              <form action="{% url 'logout' %}" method="post" style="margin:0; padding: 0;">
-                {% csrf_token %}
-                <button type="submit" class="dropdown-item btn btn-link text-decoration-none" style="padding-right: 20px; padding-bottom: 8px;">خروج</button>
-              </form>
+              <li><a href="{% url 'new_post' %}">اضافه کردن پست</a></li>
               <li><a href="{% url 'profile' %}">پروفایل</a></li>
-              <li><a href="{% url 'password_change' %}">تغییر رمز</a></li>
-              <li><a href="{% url 'password_reset' %}">ریست رمز</a></li>
+              
+              <hr class="dropdown">
+              <li>
+                <form action="{% url 'logout' %}" method="post" class="m-0">
+                  {% csrf_token %}
+                  <button type="submit" class="dropdown-item"  style="padding-right: 20px; padding-bottom: 10px;">خروج</button>
+                </form>
+              </li>
             </ul>
           </li>
           {% else %}
-          <li class="dropdown"><a href="#">کاربر <span><i class="bi bi-chevron-down"></i></span></a>
+          <li class="dropdown"><a href="#"><span>کاربر</span> <i class="bi bi-chevron-down"></i></a>
             <ul>
               <li><a href="{% url 'login' %}">ورود</a></li>
               <li><a href="{% url 'signup' %}">ثبت نام</a></li>
@@ -81,7 +85,7 @@
           {% endif %}
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
-      </nav><!-- .navbar -->
+      </nav>
     </div>
   </header><!-- End Header -->
 
@@ -95,71 +99,50 @@
   <!-- ======= Footer ======= -->
   <footer id="footer" data-aos="fade-up" data-aos-easing="ease-in-out" data-aos-duration="500">
 
-    <div class="footer-newsletter">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-6">
-            <h4>خبرنامه ما</h4>
-            <p>برای دریافت آخرین اخبار و به‌روزرسانی‌ها در خبرنامه ما عضو شوید.</p>
-          </div>
-          <div class="col-lg-6">
-            <form action="" method="post">
-              <input type="email" name="email"><input type="submit" value="عضویت">
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
+
   
     <div class="footer-top">
       <div class="container">
         <div class="row">
-  
-          <div class="col-lg-3 col-md-6 footer-links">
-            <h4>لینک‌های مفید</h4>
-            <ul>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">خانه</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">درباره ما</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">خدمات</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">شرایط استفاده</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">سیاست حریم خصوصی</a></li>
-            </ul>
-          </div>
-  
-          <div class="col-lg-3 col-md-6 footer-links">
-            <h4>خدمات ما</h4>
-            <ul>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">طراحی وب</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">توسعه وب</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">مدیریت محصول</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">بازاریابی</a></li>
-              <li><i class="bx bx-chevron-right"></i> <a href="#">طراحی گرافیک</a></li>
-            </ul>
-          </div>
-  
-          <div class="col-lg-3 col-md-6 footer-contact">
-            <h4>تماس با ما</h4>
-            <p>
-              خیابان آدم، پلاک A108 <br>
-              نیویورک، NY 535022<br>
-              ایالات متحده <br><br>
-              <strong>تلفن:</strong> +1 5589 55488 55<br>
-              <strong>ایمیل:</strong> info@example.com<br>
-            </p>
-  
-          </div>
-  
-          <div class="col-lg-3 col-md-6 footer-info">
-            <h3>درباره مدرنا</h3>
-            <p>توضیحی کوتاه درباره شرکت یا وبلاگ شما در این قسمت قرار می‌گیرد تا بازدیدکنندگان اطلاعات بیشتری کسب کنند.</p>
+    
+          <div class="col-lg-4 col-md-6 footer-info">
+            <h3>درباره اطلس</h3>
+            <p>اطلس  فضایی برای اشتراک‌گذاری دانش و تجربه در حوزه‌های متنوع تکنولوژی، امنیت، آموزش و سبک زندگی است. ما تلاش می‌کنیم تا با ارائه محتوای کاربردی و به‌روز، شما را در مسیر یادگیری و آگاهی همراهی کنیم.</p>
             <div class="social-links mt-3">
               <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
               <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
               <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
-              <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
             </div>
           </div>
-  
+    
+          <div class="col-lg-2 col-md-6 footer-links">
+            <h4>لینک‌های سریع</h4>
+            <ul>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'home' %}">خانه</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'about' %}">درباره ما</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'contact' %}">تماس با ما</a></li>
+            </ul>
+          </div>
+    
+          <div class="col-lg-3 col-md-6 footer-links">
+            <h4>پست‌های اخیر</h4>
+            {# این کد فرض می‌کند که recent_posts از context_processor در دسترس است #}
+            <ul>
+              {% for post in recent_posts %}
+                <li><i class="bx bx-chevron-right"></i> <a href="{{ post.get_absolute_url }}">{{ post.title }}</a></li>
+              {% empty %}
+                <li>پستی یافت نشد.</li>
+              {% endfor %}
+            </ul>
+          </div>
+    
+          <div class="col-lg-3 col-md-6 footer-contact">
+            <h4>تماس با ما</h4>
+            <p>
+              <strong>ایمیل:</strong> your-email@example.com<br>
+            </p>
+          </div>
+    
         </div>
       </div>
     </div>
