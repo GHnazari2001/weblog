@@ -31,7 +31,7 @@
                 <article class="entry entry-single">
 
                     <div class="entry-img">
-                        <img src="{{ post.photo.url }}" alt="" class="img-fluid">
+                        <img src="{{ post.photo.url }}" alt="{{ post.title }}" class="img-fluid" style="width: 100%;">
                     </div>
 
                     <h2 class="entry-title">
@@ -43,10 +43,7 @@
                             <li class="d-flex align-items-center"><i class="bi bi-person"></i> <a href="{% url 'posts_by_author' post.author.username %}">{{post.author.username}}</a></li>
                             <li class="d-flex align-items-center"><i class="bi bi-clock"></i> <a href="#"><time
                                         datetime="{{ post.date|date:" Y-m-d" }}">{{ post.date|date:"SHORT_DATE_FORMAT" }}</time></a></li>
-                            {% if post.category %}
-                             <li class="d-flex align-items-center"><i class="bi bi-folder"></i> <a
-                                     href="{{ post.category.get_absolute_url }}">{{ post.category.name }}</a></li>
-                            {% endif %}
+                         
                             <li class="d-flex align-items-center"><i class="bi bi-chat-dots"></i>
                                 {{post.comment_set.count }}</li>
                             <li class="d-flex align-items-center like-section" data-post-id="{{ post.pk }}">

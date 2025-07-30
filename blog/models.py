@@ -41,8 +41,7 @@ class Post(models.Model):
         blank=True ,
         verbose_name='پسندیدن'
     )
-    tags = TaggableManager()
-
+    tags = TaggableManager(verbose_name="برچسب‌ها", blank=True)
     class Meta:
         ordering = ['-date']
         

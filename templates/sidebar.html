@@ -46,9 +46,11 @@
   <div class="sidebar-item tags">
     <ul>
       {% for tag in all_tags_sidebar %}
-      <li><a href="{% url 'posts_by_tag' tag.slug %}">{{ tag.name }}</a></li>
+        {% if tag.slug %}  {# این شرط اضافه شده است تا از تگ‌های خالی جلوگیری شود #}
+          <li><a href="{% url 'posts_by_tag' tag.slug %}">{{ tag.name }}</a></li>
+        {% endif %}
       {% empty %}
-      <li> No tags found.</li>
+        <li> No tags found.</li>
       {% endfor %}
     </ul>
   </div>

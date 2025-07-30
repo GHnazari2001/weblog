@@ -83,6 +83,7 @@ class UpdatePostView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         # کاربر فقط در صورتی می‌تواند پست را ویرایش کند که نویسنده آن باشد
         obj = self.get_object()
         return obj.author == self.request.user
+   
 
 
 class DeletePostView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):

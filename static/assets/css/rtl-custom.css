@@ -219,3 +219,7 @@ body {
 .breadcrumbs .d-flex {
   flex-direction: row-reverse;
 }
+/* رفع مشکل فلش منوی کشویی در حالت موبایل */
+.navbar-mobile .dropdown > a {
+  justify-content: flex-start !important;
+}

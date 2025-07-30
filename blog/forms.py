@@ -3,15 +3,13 @@ from .models import Post, Comment,Category
 
 
 class PostForm(forms.ModelForm):
-    tags = forms.CharField(
-        label="برچسب‌ها", 
-        required=False, 
-        help_text='تگ‌های مورد نظر را با یک کاما (,) از هم جدا کنید.'
-    )
+  
     class Meta:
         model = Post
-        fields = ['title', 'excerpt', 'body','category', 'photo','tags']
-      
+        fields = ['title', 'excerpt', 'body', 'category', 'photo', 'tags']
+        help_texts = {
+            'tags': 'تگ‌های مورد نظر را با یک کاما (,) از هم جدا کنید.',
+        }
       
     def __init__(self, *args, **kwargs):
      
